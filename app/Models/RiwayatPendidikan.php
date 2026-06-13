@@ -13,7 +13,8 @@ class RiwayatPendidikan extends Model
     'nama_institusi',
     'gelar',
     'id_pelatihan',
-    'nama_pelatihan'
+    'nama_pelatihan',
+    'tahun_lulus',
 ];
 
 // Relasi ke tabel User (Pegawai)

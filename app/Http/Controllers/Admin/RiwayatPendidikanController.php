@@ -42,6 +42,7 @@ class RiwayatPendidikanController extends Controller
             'gelar'           => 'nullable|string|max:50',
             'id_pelatihan'    => 'nullable',
             'nama_pelatihan'  => 'nullable|string|max:150',
+            'tahun_lulus'      => 'nullable|numeric|digits_between:1,54'
         ]);
 
         RiwayatPendidikan::create($request->all());
@@ -66,6 +67,8 @@ class RiwayatPendidikanController extends Controller
             'gelar'           => 'nullable|string|max:50',
             'id_pelatihan'    => 'nullable',
             'nama_pelatihan'  => 'nullable|string|max:150',
+            'tahun_lulus'      => 'nullable|numeric|digits_between:1,54'
+
         ]);
 
         $pendidikan->update($request->all());

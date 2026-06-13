@@ -60,6 +60,7 @@ $title = 'Riwayat Pendidikan';
                                     <th>No</th>
                                     <th>Nama Pegawai</th>
                                     <th>Jenjang</th>
+                                    <th>Tahun Lulus</th>
                                     <th>Nama Institusi</th>
                                     <th>Gelar</th>
                                     <th>Pelatihan / Diklat</th>
@@ -72,6 +73,7 @@ $title = 'Riwayat Pendidikan';
                                     <td>{{ $pendidikan->firstItem() + $key }}</td>
                                     <td><strong>{{ $p->user->name ?? 'Tidak Diketahui' }}</strong></td>
                                     <td>{{ $p->jenjang }}</td>
+                                    <td>{{ $p->tahun_lulus }}</td>
                                     <td>{{ $p->nama_institusi }}</td>
                                     <td>{{ $p->gelar ?? '-' }}</td>
                                     <td>{{ $p->nama_pelatihan ?? '-' }}</td>
@@ -127,16 +129,10 @@ $title = 'Riwayat Pendidikan';
                         <div class="col-md-12">
                             <label class="form-label">Jenjang Pendidikan</label>
                             <input type="text" name="jenjang" id="" class="form-control form_border" required>
-                            {{-- <select name="jenjang" class="form-select form_border" required>
-                                <option value="">-- Pilih Jenjang --</option>
-                                <option value="SD">SD</option>
-                                <option value="SMP">SMP</option>
-                                <option value="SMA/SMK">SMA/SMK</option>
-                                <option value="D3">D3</option>
-                                <option value="S1">S1</option>
-                                <option value="S2">S2</option>
-                                <option value="S3">S3</option>
-                            </select> --}}
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Tahun Lulus</label>
+                            <input type="number" name="tahun_lulus" id="" class="form-control form_border">
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Nama Institusi / Sekolah</label>
@@ -191,15 +187,10 @@ $title = 'Riwayat Pendidikan';
                         <div class="col-md-12">
                             <label class="form-label">Jenjang Pendidikan</label>
                              <input type="text" name="jenjang" id="edit_jenjang" class="form-control form_border" required>
-                            {{-- <select name="jenjang" id="edit_jenjang" class="form-select form_border" required>
-                                <option value="SD">SD</option>
-                                <option value="SMP">SMP</option>
-                                <option value="SMA/SMK">SMA/SMK</option>
-                                <option value="D3">D3</option>
-                                <option value="S1">S1</option>
-                                <option value="S2">S2</option>
-                                <option value="S3">S3</option>
-                            </select> --}}
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Tahun Lulus</label>
+                             <input type="text" name="tahun_lulus" id="edit_tahun_lulus" class="form-control form_border">
                         </div>
                         <div class="col-md-12">
                             <label class="form-label">Nama Institusi / Sekolah</label>
@@ -291,6 +282,7 @@ console.log("=================================");
                             
                 // Suntikkan data ke text input lainnya
                 document.getElementById('edit_jenjang').value = data.jenjang ?? '';
+                document.getElementById('edit_tahun_lulus').value = data.tahun_lulus ?? '';
                 document.getElementById('edit_nama_institusi').value = data.nama_institusi ?? '';
                 document.getElementById('edit_gelar').value = data.gelar ?? '';
                 document.getElementById('edit_id_pelatihan').value = data.id_pelatihan ?? '';

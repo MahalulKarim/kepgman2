@@ -36,16 +36,19 @@ class DashboardController extends Controller
         $totalJabatan    = Jabatan::count(); 
         
         // Menghitung data spesifik milik akun login ini sendiri
-        $totalPensiun    = Pensiun::where('id_user', $userId)->count();
-        $totalPendidikan = RiwayatPendidikan::where('id_user', $userId)->count();
+        $lastPensiun    = Pensiun::where('id_user', $userId)->latest()
+                        ->first();
+        $lastPendidikan = RiwayatPendidikan::where('id_user', $userId)->latest()
+                        ->first();
+                        // dd($lastPendidikan);
 
         // 4. Kirim data diri $pegawai beserta statistik ke view dashboard
         return view('pegawai.dashboard', compact(
             'pegawai', 
             'totalPegawai', 
             'totalJabatan', 
-            'totalPensiun', 
-            'totalPendidikan',
+            'lastPensiun', 
+            'lastPendidikan',
         ));
     }
 }

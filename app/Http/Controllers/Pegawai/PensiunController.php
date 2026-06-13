@@ -27,7 +27,9 @@ public function index(Request $request)
     }
 
     // 3. Ambil data pensiun miliknya
-    $pensiun = $query->latest()->paginate(10);
+    $pensiun = $query->latest()->first();
+
+   
     
     // 4. Ambil profil pegawai milik diri sendiri untuk keperluan info teks di form/modal (jika ada)
     $pegawaiAnda = Pegawai::where('user_id', Auth::id())->first(); 
