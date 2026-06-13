@@ -140,7 +140,11 @@ $title = 'Pensiun';
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Masa Kerja</label>
-                            <input type="text" name="masa_kerja" class="form-control form_border" placeholder="Contoh: 25 Tahun 4 Bulan" required>
+                            <div class="input-group mb-3">
+                                <input type="number" name="masa_kerja" class="form-control form_border" placeholder="ex: 20" aria-label="masa_kerja" aria-describedby="basic-addon2" required>
+                                <span class="input-group-text form_border" id="basic-addon2">Tahun</span>
+                            </div>
+                          
                         </div>
                     </div>
                     <div class="row g-3 mb-3">
@@ -202,7 +206,11 @@ $title = 'Pensiun';
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Masa Kerja</label>
-                            <input type="text" name="masa_kerja" id="edit_masa_kerja" class="form-control form_border" required>
+                            <div class="input-group mb-3">
+                                <input type="number" name="masa_kerja" id="edit_masa_kerja" class="form-control form_border" placeholder="ex: 20" aria-label="masa_kerja" aria-describedby="edit_masa_kerja" required>
+                                <span class="input-group-text form_border" id="edit_masa_kerja">Tahun</span>
+                            </div>
+                          
                         </div>
                     </div>
                     <div class="row g-3 mb-3">

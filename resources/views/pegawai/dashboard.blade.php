@@ -26,6 +26,11 @@ $title = 'Dashboard';
             <div class="card card-body" style="border-right: 10px solid #9cb50e;">
                 <div class="row">
                     <div class="col-lg-12">
+                        <h4 class="text-center text-muted">
+                            MAN 2 WONOSOBO
+                        </h4>
+                    </div>
+                    <div class="col-lg-12">
                         <h4 class="text-center">
                             Status Pegawai
                         </h4>
@@ -39,10 +44,18 @@ $title = 'Dashboard';
                 </div>
             </div>
         </div>
+        <div class="col-lg-2 mb-4">
+
+        </div>
         <div class="col-lg-4 mb-4">
             <div class="card card-body" style="border-right: 10px solid #9cb50e;">
                 <div class="row">
                     <div class="col-lg-12">
+                        <div class="col-lg-12">
+                            <h4 class="text-center text-muted">
+                                MAN 2 WONOSOBO
+                            </h4>
+                        </div>
                         <h4 class="text-center">
                             Jabatan Aktif
                         </h4>
@@ -59,13 +72,51 @@ $title = 'Dashboard';
             <div class="card card-body" style="border-right: 10px solid #9cb50e;">
                 <div class="row">
                     <div class="col-lg-12">
+                        <h4 class="text-center text-muted">
+                            MAN 2 WONOSOBO
+                        </h4>
+                    </div>
+                    <div class="col-lg-12">
                         <h4 class="text-center">
                           Seluruh Penddikan Terakhir
                         </h4>
                     </div>
                     <div class="col-lg-12 pt-5">
-                        <h5 class="text-center">
-                           {{ $totalPendidikan }}
+                        <h5 class="text-center">                        
+                           @if($lastPendidikan)    
+                                 {{ $lastPendidikan->tahun_lulus }}
+                            @else
+                                <p>Riwayat pendidikan belum diisi.</p>
+                            @endif
+                        </h5>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+         <div class="col-lg-2 mb-4">
+            
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card card-body" style="border-right: 10px solid #9cb50e;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4 class="text-center text-muted">
+                            MAN 2 WONOSOBO
+                        </h4>
+                    </div>
+                    <div class="col-lg-12">
+                        <h4 class="text-center">
+                          Informasi Pensiun
+                        </h4>
+                    </div>
+                    <div class="col-lg-12 pt-5">
+                        <h5 class="text-center">                        
+                           @if($lastPensiun)    
+                                 {{ \Carbon\Carbon::parse($lastPensiun->tanggal_pensiun)->format('Y') }}
+                            @else
+                                <p>Riwayat pensiun belum diisi.</p>
+                            @endif
                         </h5>
                     </div>
                     

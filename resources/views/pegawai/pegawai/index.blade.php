@@ -13,16 +13,34 @@ $title = 'Data Diri';
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6 bg-white">
-            <h1 class="text-center" style="font-size: 100px">
-                <i class="bi bi-person-fill"></i>
-            </h1>
-            <h3>
-                NIP : {{ $pegawai->nip ?? '-' }}
-            </h3>
-            <h3>
-                Jabatan : {{ $pegawai->jabatan->nama_jabatan ?? '-' }}
-            </h3>
+        <div class="col-lg-6">
+            <div class="card card-body border-0 rounded-3 shadow-sm p-3 mb-5 bg-body">
+                <div class="row">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        @if($pegawai->foto)
+                            <img src="{{ asset('storage/foto_pegawai/'.$pegawai->foto) }}" alt="Foto" class="" width="100" height="120" style="object-fit: cover;">
+                        @else
+                          <h1 class="text-center" style="font-size: 100px">
+                            <i class="bi bi-person-fill"></i>
+                        </h1>
+                        @endif
+
+                    </div>
+                    <div class="col-lg-12 pt-2">
+                    <h3 class="text-center">
+                       {{ $pegawai->nama ?? '-' }}
+                    </h3>
+                    <h4 class="text-center text-muted">
+                        NIP : {{ $pegawai->nip ?? '-' }}
+                    </h4>
+                    <h4 class="text-center text-muted">
+                        Jabatan : {{ $pegawai->jabatan->nama_jabatan ?? '-' }}
+                    </h4>
+                    </div>
+                </div>
+                
+               
+            </div>
         </div>
         <div class="col-lg-6 p-3" style="background-color: rgba(133, 133, 133, 0.614)">
             <h3 class="">

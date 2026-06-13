@@ -12,30 +12,38 @@ use Illuminate\Support\Facades\Auth;
 class RiwayatPendidikanController extends Controller
 {
     //
-    public function index(Request $request)
+   public function index(Request $request)
     {
-       $query = RiwayatPendidikan::with('user')->where('id_user', Auth::id());
+        // 1. Base Query untuk user yang sedang login
+        $baseQuery = RiwayatPendidikan::with('user')->where('id_user', Auth::id());
 
-        // 2. Fitur Pencarian dikhususkan untuk mencari Nama Institusi atau Jenjang (S1/SMA/dll) miliknya
+        // 2. Fitur Pencarian (berlaku untuk kedua kategori)
         if ($request->filled('cari_pendidikan')) {
             $search = $request->cari_pendidikan;
-            
-            // Menggunakan where bertingkat (advanced wheres) agar filter user_id tidak rusak oleh orWhere
-            $query->where(function($q) use ($search) {
+            $baseQuery->where(function($q) use ($search) {
                 $q->where('nama_institusi', 'LIKE', "%{$search}%")
-                ->orWhere('jenjang', 'LIKE', "%{$search}%"); // Tambahan: bisa cari berdasarkan jenjang (misal: S1)
+                  ->orWhere('jenjang', 'LIKE', "%{$search}%")
+                  ->orWhere('nama_pelatihan', 'LIKE', "%{$search}%"); // Tambahan: bisa cari nama pelatihan juga
             });
         }
 
-        // 3. Ambil data dengan urutan terbaru dan batasi 10 data per halaman
-        $pendidikan = $query->latest()->paginate(10);
+        // 3. PISAHKAN MENJADI 2 TABEL (Clone query dasar agar tidak saling tabrakan)
         
-        // 4. Untuk form tambah data, user_id otomatis terisi milik dia sendiri, 
-        // jadi tidak perlu memanggil Pegawai::all() (untuk mencegah dia memilih nama pegawai lain).
-        // Kita cukup ambil data profil pegawai dia sendiri jika dibutuhkan untuk teks info.
+        // Tabel Formal: yang nama_pelatihannya NULL atau kosong
+        $pendidikanFormal = (clone $baseQuery)->where(function($q) {
+            $q->whereNull('nama_pelatihan')->orWhere('nama_pelatihan', '');
+        })->latest()->paginate(5, ['*'], 'page_formal'); // custom nama halaman: ?page_formal=1
+
+        // Tabel Pelatihan: yang nama_pelatihannya ADA isinya
+        $pelatihanDiklat = (clone $baseQuery)->whereNotNull('nama_pelatihan')
+            ->where('nama_pelatihan', '!=', '')
+            ->latest()->paginate(5, ['*'], 'page_pelatihan'); // custom nama halaman: ?page_pelatihan=1
+        
+        // 4. Ambil data profil pegawai milik sendiri
         $pegawaiAnda = Pegawai::where('user_id', Auth::id())->first();
 
-        return view('pegawai.pendidikan.index', compact('pendidikan', 'pegawaiAnda'));
+        // 5. Kirim variabel baru ke view
+        return view('pegawai.pendidikan.index', compact('pendidikanFormal', 'pelatihanDiklat', 'pegawaiAnda'));
     }
 
     public function store(Request $request)
