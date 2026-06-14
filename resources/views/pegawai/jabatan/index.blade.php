@@ -18,7 +18,7 @@ $title = 'Jabatan';
     <div class="row pt-2">
         <div class="col-lg-4">
             @if($pegawaiProfil->foto)
-                <img src="{{ asset('storage/foto_pegawai/'.$pegawaiProfil->foto) }}" alt="Foto" class="" width="200" height="250" style="object-fit: cover;">
+                <img src="{{ asset('foto_pegawai/'.$pegawaiProfil->foto) }}" alt="Foto" class="" width="200" height="250" style="object-fit: cover;">
             @else
             <h1 class="text-center" style="font-size: 100px">
                 <i class="bi bi-person-fill"></i>

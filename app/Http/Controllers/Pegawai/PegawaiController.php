@@ -86,16 +86,18 @@ class PegawaiController extends Controller
         ]);
 
         // 2. Handling Upload Foto
-       
-        $namaFoto = null;
-        if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
-            // Buat nama unik agar tidak bentrok
-            $namaFoto = time() . '_' . $foto->getClientOriginalName();
-            
-            // Taruh di disk 'public' dengan nama folder 'foto_pegawai'
-            $foto->storeAs('foto_pegawai', $namaFoto, 'public');
-        }
+       $namaFoto = null;
+
+            if ($request->hasFile('foto')) {
+                $foto = $request->file('foto');
+                
+                // Bersihkan nama file dari spasi agar aman di URL
+                $namaOriginal = str_replace(' ', '_', $foto->getClientOriginalName());
+                $namaFoto = time() . '_' . $namaOriginal;
+                
+                // Pindahkan file langsung ke folder public/foto_pegawai
+                $foto->move(public_path('foto_pegawai'), $namaFoto);
+            }
   
 
         // 3. Simpan Data Pegawai (Sertakan jabatan_id)
@@ -160,19 +162,23 @@ class PegawaiController extends Controller
         }
         $user->save();
 
-        $namaFoto = $pegawai->foto;
-            if ($request->hasFile('foto')) {
-                // Hapus foto lama dari storage jika sebelumnya ada berkasnya
-                if ($pegawai->foto) {
-                    Storage::disk('public')->delete('foto_pegawai/' . $pegawai->foto);
-                }
-                
-                $foto = $request->file('foto');
-                $namaFoto = time() . '_' . $foto->getClientOriginalName();
-                
-                // Simpan file baru ke storage
-                $foto->storeAs('foto_pegawai', $namaFoto, 'public');
+     $namaFoto = $pegawai->foto;
+
+        if ($request->hasFile('foto')) {
+            // 1. Hapus foto lama langsung dari folder public (jika ada)
+            if ($pegawai->foto && file_exists(public_path('foto_pegawai/' . $pegawai->foto))) {
+                unlink(public_path('foto_pegawai/' . $pegawai->foto));
             }
+            
+            $foto = $request->file('foto');
+            // 2. Buat nama file yang aman tanpa spasi
+            $namaOriginal = str_replace(' ', '_', $foto->getClientOriginalName());
+            $namaFoto = time() . '_' . $namaOriginal;
+            
+            // 3. Pindahkan file langsung ke folder public/foto_pegawai
+            // Perintah ini akan otomatis membuat folder 'foto_pegawai' jika belum ada
+            $foto->move(public_path('foto_pegawai'), $namaFoto);
+        }
         
 
         // Update Data Pegawai (Sertakan jabatan_id)

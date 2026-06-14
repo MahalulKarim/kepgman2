@@ -18,7 +18,7 @@ $title = 'Data Diri';
                 <div class="row">
                     <div class="col-lg-12 d-flex justify-content-center">
                         @if($pegawai->foto)
-                            <img src="{{ asset('storage/foto_pegawai/'.$pegawai->foto) }}" alt="Foto" class="" width="100" height="120" style="object-fit: cover;">
+                            <img src="{{ asset('foto_pegawai/'.$pegawai->foto) }}" alt="Foto" class="" width="100" height="120" style="object-fit: cover;">
                         @else
                           <h1 class="text-center" style="font-size: 100px">
                             <i class="bi bi-person-fill"></i>
@@ -110,7 +110,7 @@ $title = 'Data Diri';
                         <label for="fotoEdit" style="cursor: pointer;" class="d-inline-block">
                             @if ($pegawai->foto)
                             <div class="preview-container" id="preview_foto">
-                                <img src="{{ asset('storage/foto_pegawai/'.$pegawai->foto) }}" 
+                                <img src="{{ asset('foto_pegawai/'.$pegawai->foto) }}" 
                                      id="imgPreviewEdit" 
                                      style="width: 100%; height: 100%; object-fit: cover; ">
                                 </div>
@@ -126,8 +126,8 @@ $title = 'Data Diri';
                     </div>
 
                     <div class="mb-2">
-                        <label class="form-label font-weight-bold">Jabatan Pegawai</label>
-                        <select name="jabatan_id" id="edit_jabatan_id" class="form-select form_border" required readonly disabled>
+                        <label class="form-label font-weight-bold">Jabatan Pegawai (Jabatan hanya dapat di update melalui admin *)</label>
+                        <select name="jabatan_id" id="edit_jabatan_id" class="form-control" required readonly disabled>
                             <option value="" disabled>-- Pilih Jabatan --</option>
                             @foreach($jabatan as $j)
                                 @if($j->status_jabatan == 'aktif')
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (previewDiv) {
                         if(data.foto) {
                             previewDiv.innerHTML = `
-                                <img src="/storage/foto_pegawai/${data.foto}" 
+                                <img src="{{ asset('foto_pegawai') }}/${data.foto}" 
                                      id="imgPreviewEdit" 
                                      style="width: 100%; height: 100%; object-fit: cover; ">
                             `;

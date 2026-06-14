@@ -19,7 +19,7 @@ $title = 'Pensiun';
                 <div class="row">
                     <div class="col-lg-12 d-flex justify-content-center">
                         @if($pegawaiAnda->foto)
-                            <img src="{{ asset('storage/foto_pegawai/'.$pegawaiAnda->foto) }}" alt="Foto" class="" width="70%" height="260" style="object-fit: cover;">
+                            <img src="{{ asset('foto_pegawai/'.$pegawaiAnda->foto) }}" alt="Foto" class="" width="70%" height="260" style="object-fit: cover;">
                         @else
                           <h1 class="text-center" style="font-size: 100px">
                             <i class="bi bi-person-fill"></i>
