@@ -76,7 +76,7 @@ $title = 'Pegawai';
                                     <td>{{ $p->nip ?? '-' }}</td>
                                     <td>
                                         @if($p->foto)
-                                            <img src="{{ asset('storage/foto_pegawai/'.$p->foto) }}" alt="Foto" class="" width="70" height="80" style="object-fit: cover;">
+                                            <img src="{{ asset('foto_pegawai/'.$p->foto) }}" alt="Foto" class="" width="70" height="80" style="object-fit: cover;">
                                         @else
                                             <span class="badge bg-secondary">No Foto</span>
                                         @endif
@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (previewDiv) {
                         if(data.foto) {
                             previewDiv.innerHTML = `
-                                <img src="/storage/foto_pegawai/${data.foto}" 
+                                <img src="{{ asset('foto_pegawai') }}/${data.foto}" 
                                      id="imgPreviewEdit" 
                                      style="width: 100%; height: 100%; object-fit: cover; ">
                             `;
