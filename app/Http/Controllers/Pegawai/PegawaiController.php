@@ -123,6 +123,7 @@ class PegawaiController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $pegawai = Pegawai::findOrFail($id);
         $user = $pegawai->user;
 
@@ -133,7 +134,7 @@ class PegawaiController extends Controller
             'nama' => 'required|string|max:150',
             
             // Tambahkan validasi untuk jabatan_id di sini juga
-            'jabatan_id' => 'required|exists:jabatans,id',
+            // 'jabatan_id' => 'required|exists:jabatans,id',
             
             'tempat_lahir' => 'required|string|max:100',
             'tgl_lahir' => 'required|date',
@@ -145,16 +146,7 @@ class PegawaiController extends Controller
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Update Akun User
-         $jabatan = Jabatan::where('id',$request->jabatan_id)->first();
-      
-        if($jabatan->level_jabatan == 'kepala sekolah'){
-            $level = 2;
-        }else{
-            $level = 3;
-        }
-
-        $user->level=$level;
+       
         $user->name = $request->nama;
         $user->email = $request->email;
         if ($request->filled('password')) {
@@ -183,7 +175,7 @@ class PegawaiController extends Controller
 
         // Update Data Pegawai (Sertakan jabatan_id)
         $pegawai->update([
-            'jabatan_id' => $request->jabatan_id, // Tambahkan baris ini
+            // 'jabatan_id' => $request->jabatan_id, // Tambahkan baris ini
             'nip' => $request->nip,
             'nama' => $request->nama,
             'tempat_lahir' => $request->tempat_lahir,
@@ -195,7 +187,7 @@ class PegawaiController extends Controller
             'status_pegawai' => $request->status_pegawai,
             'foto' => $namaFoto,
         ]);
-
+       
         return redirect()->route('pegawai.pegawai.index')->with('success', 'Data pegawai berhasil diperbarui.');
     }
 
