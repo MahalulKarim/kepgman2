@@ -201,9 +201,7 @@ class PegawaiController extends Controller
         $pegawai = Pegawai::findOrFail($id);
         
         // Hapus foto dari storage
-        if ($pegawai->foto) {
-            Storage::delete('public/foto_pegawai/' . $pegawai->foto);
-        }
+       
 
         // Hapus user (akan otomatis menghapus pegawai karena cascadeOnDelete)
         $pegawai->user->delete();

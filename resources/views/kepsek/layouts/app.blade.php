@@ -75,6 +75,11 @@
           Dashboard
         </a>
       </li>
+      <li class="nav-item text-center">
+        <a href="{{ route('kepsek.kegiatan.index') }}" class="nav-link text-white {{($title=='Kegiatan')? 'active':''}}" aria-current="page">
+          Data Kegiatan Harian Pegawai
+        </a>
+      </li> 
        <li class="nav-item text-center">
         <a href="{{ route('kepsek.laporan.index') }}" class="nav-link text-white {{($title=='Laporan')? 'active':''}}" aria-current="page">
           Data Laporan
@@ -155,6 +160,21 @@
 
   </div>
    <div class="bg-light" style="padding-left: 17%;min-height: 100vh!important;width: 100%;overflow-x: scroll;">
+    <div class="container px-4">
+      @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> Gagal menyimpan data. Periksa kembali inputan Anda.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    </div>
     @yield('content')
 
   </div>

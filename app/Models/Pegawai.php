@@ -47,4 +47,10 @@ class Pegawai extends Model
         // Parameter ketiga adalah nama kolom local key di tabel pegawai
         return $this->hasOne(Pensiun::class, 'id_user', 'id_user'); 
     }
+    public function kegiatan()
+    {
+        // Parameter ke-2: nama kolom foreign key di tabel kegiatans (user_id)
+        // Parameter ke-3: nama kolom local key di tabel pegawais (user_id)
+        return $this->hasMany(Kegiatan::class, 'user_id', 'user_id');
+    }
 }
