@@ -24,7 +24,7 @@ class LaporanController extends Controller
 public function cetakPdf(Request $request)
     {
         $request->validate([
-            'jenis_laporan' => 'required|in:pegawai,jabatan,pendidikan,pensiun',
+            'jenis_laporan' => 'required|in:pegawai,jabatan,pendidikan,pensiun,kegiatan',
             'keyword'       => 'nullable|string',
             'catatan'       => 'nullable|string'
         ]);
@@ -108,6 +108,42 @@ public function cetakPdf(Request $request)
                 ]);
             }
         }
+      // --- 5. MODUL KEGIATAN (PERBAIKAN KONDISI DAN BLOK PROGRAM) ---
+    elseif ($jenis == 'kegiatan') {
+        // Memuat relasi 'kegiatan' yang ada di model Pegawai
+        $query = Pegawai::with('kegiatan');
+
+        // Fitur pencarian berdasarkan nama atau nip pegawai
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('nama', 'LIKE', "%{$keyword}%")
+                  ->orWhere('nip', 'LIKE', "%{$keyword}%");
+            });
+        }
+
+        $data_laporan = $query->get();
+
+        foreach ($data_laporan as $row) {
+            // 1. Ambil total kegiatan pegawai tersebut
+            $total_kegiatan = $row->kegiatan->count();
+            
+            // 2. Ambil status kegiatan
+            $disetujui = $row->kegiatan->where('status', 'disetujui')->count();
+            $pending   = $row->kegiatan->where('status', 'pending')->count();
+
+            // 3. Gabungkan informasi tersebut ke dalam string catatan laporan
+            $catatan_otomatis = "Pegawai ini telah menginput " . $total_kegiatan . " kegiatan harian. " .
+                                "(" . $disetujui . " Disetujui, " . $pending . " Pending). " . 
+                                ($catatan ? "\nCatatan Tambahan Admin: " . $catatan : "");
+
+            // 4. Masukkan ke dalam tabel laporans (Asumsikan logbook masuk via id_pegawai)
+            Laporan::create([
+                'id_pegawai'  => $row->id,
+                'catatan'     => $catatan_otomatis,
+                'tgl_laporan' => $tgl_sekarang
+            ]);
+        }
+    }
 
         if ($data_laporan->isEmpty()) {
             return redirect()->back()->with('error', 'Tidak ada data pencocokan yang dapat dicetak berdasarkan filter tersebut.');

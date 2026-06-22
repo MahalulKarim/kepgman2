@@ -87,6 +87,17 @@ $title = 'Laporan';
                                 </div>
                             </div>
                         </div>
+                        <div class="col-6 col-md-3">
+                            <div class="card h-100 report-card" data-value="kegiatan" onclick="selectReportCard(this)">
+                                <div class="card-body text-center p-3">
+                                    <div class="icon-box mb-2 text-primary">
+                                      
+                                        <i class="bi bi-card-checklist fs-2"></i>
+                                    </div>
+                                    <h6 class="card-title mb-1 small fw-bold">Data Kegiatan</h6>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row p-4">
                         <div class="col-lg-6">
@@ -147,7 +158,7 @@ function selectReportCard(element) {
         if (value === 'pegawai') {
             keywordLabel.innerText = "2. Saring Berdasarkan Nama / NIP (Opsional)";
             keywordInput.placeholder = "Kosongkan jika ingin mencetak semua data pegawai...";
-        } else if (value === 'pendidikan' || value === 'pensiun') {
+        } else if (value === 'pendidikan' || value === 'pensiun' || value === 'kegiatan') {
             keywordLabel.innerText = "2. Saring Berdasarkan Nama / NIP Pegawai (Opsional)";
             keywordInput.placeholder = "Cari nama atau NIP pegawai terkait...";
         }

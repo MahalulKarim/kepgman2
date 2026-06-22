@@ -147,6 +147,31 @@ $title = 'Laporan';
                     </div>
                 </div>
             </div>
+            {{-- <div class="col-12">
+                <div class="card h-100 report-card" data-value="kegiatan" onclick="selectReportCard(this)">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-box text-success me-3">
+                                    <i class="bi bi-card-checklist fs-1"></i>
+                                </div>
+                                <div>
+                                    <h6 class="card-title mb-0 fw-bold">Laporan Data Kegiatan</h6>
+                                    <small class="text-muted extra-small">Cetak arsip kegiatan pegawai</small>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-toggle="modal" data-bs-target="#modalPreviewKegiatan" onclick="event.stopPropagation();">
+                                    <i class="bi bi-eye me-1"></i> Lihat
+                </button>
+                                <button type="button" class="btn btn-sm btn-success px-3" onclick="directPrint(event, 'kegiatan')">
+                                    <i class="bi bi-file-earmark-pdf me-1"></i> PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
         </div>
 
         {{-- <div class="row p-4 mt-2">
@@ -184,11 +209,16 @@ $title = 'Laporan';
                 <div class="table-responsive p-3">
                     <table class="table table-sm table-bordered table-striped mb-0 text-nowrap" style="font-size: 11px;">
                         <thead class="table-secondary">
-                            <tr><th>No</th><th>NIP</th><th>Nama Lengkap</th><th>L/P</th><th>Jabatan Utama</th><th>Status</th></tr>
+                            <tr><th>No</th><th>NIP</th><th>Nama Lengkap</th><th>L/P</th><th>Jabatan</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>1</td><td>19880211...</td><td>Ahmad Syarif, S.Ag</td><td>L</td><td>Kepala Sekolah</td><td><span class="badge bg-success">PNS</span></td></tr>
-                            <tr><td>2</td><td>-</td><td>Siti Aminah, S.Pd</td><td>P</td><td>Guru Kurikulum</td><td><span class="badge bg-secondary">NON-PNS</span></td></tr>
+                        @php
+                            $no=1;
+                        @endphp
+                        @foreach ($pegawai as $p)
+                        <tr><td>{{ $no++ }}</td><td>{{ $p->nip }}</td><td>{{ $p->nama }}</td><td>{{ $p->jenis_kelamin }}</td><td>{{ $p->jabatan->nama_jabatan }}</td>
+                            
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -214,8 +244,15 @@ $title = 'Laporan';
                         <thead class="table-secondary">
                             <tr><th>No</th><th>Kode</th><th>Nama Jabatan</th><th>Departemen</th><th>Gaji Pokok</th><th>Tunjangan</th></tr>
                         </thead>
+
                         <tbody>
-                            <tr><td>1</td><td><code>JAB001</code></td><td>Kepala Sekolah</td><td>Manajemen</td><td>Rp 4.500.000</td><td>Rp 1.500.000</td></tr>
+                            @php
+                                $nom=1;
+                            @endphp
+                            @foreach ($jabatan as $jab)
+                            <tr><td>{{ $no++ }}</td><td><code>{{ $jab->kode_jabatan }}</code></td><td>{{ $jab->nama_jabatan }}</td><td>{{ $jab->departemen }}</td><td>Rp {{ $jab->gaji_pokok }}</td><td>Rp {{ $jab->tunjangan }}</td></tr>
+                                
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -239,10 +276,27 @@ $title = 'Laporan';
                 <div class="table-responsive p-3">
                     <table class="table table-sm table-bordered table-striped mb-0 text-nowrap" style="font-size: 11px;">
                         <thead class="table-secondary">
-                            <tr><th>No</th><th>NIP</th><th>Nama Pegawai</th><th>Jenjang</th><th>Institusi Akademik</th><th>Gelar</th></tr>
-                        </thead>
+                         <tr>
+                            <th width="4%" class="text-center">No</th>
+                            <th width="15%">NIP Pegawai</th>
+                            <th>Nama Pegawai</th>
+                            <th width="10%">Jenjang</th>
+                            <th>Nama Institusi Akademik</th>
+                            <th width="12%">Gelar Kelulusan</th>
+                            <th>Pelatihan Eksternal</th>
+                        </tr>
                         <tbody>
-                            <tr><td>1</td><td>19880211...</td><td>Ahmad Syarif, S.Ag</td><td>S1</td><td>Universitas Islam Negeri</td><td>S.Ag</td></tr>
+                            @foreach($riwayatPendidikan as $key => $edu)
+                            <tr>
+                                <td class="text-center">{{ $key + 1 }}</td>
+                                <td>{{ $edu->user->pegawai->nip ?? '-' }}</td>
+                                <td><strong>{{ $edu->user->pegawai->nama ?? 'Akun Bukan Pegawai' }}</strong></td>
+                                <td><span class="badge">{{ $edu->jenjang }}</span></td>
+                                <td>{{ $edu->nama_institusi }}</td>
+                                <td>{{ $edu->gelar ?? '-' }}</td>
+                                <td>{{ $edu->nama_pelatihan ?? '-' }}</td>
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -266,10 +320,82 @@ $title = 'Laporan';
                 <div class="table-responsive p-3">
                     <table class="table table-sm table-bordered table-striped mb-0 text-nowrap" style="font-size: 11px;">
                         <thead class="table-secondary">
-                            <tr><th>No</th><th>Nama Pegawai</th><th>Tanggal Pensiun</th><th>Masa Kerja</th><th>Total Tunjangan</th><th>Status</th></tr>
+                           <tr>
+                                <th width="4%" class="text-center">No</th>
+                                <th width="14%">NIP</th>
+                                <th>Nama Pegawai</th>
+                                <th width="12%">TMT CPNS</th>
+                                <th width="12%">TMT Pangkat</th>
+                                <th width="12%">Tanggal Pensiun</th>
+                                <th width="10%">Masa Kerja</th>
+                                <th>Total Tunjangan</th>
+                                <th width="10%" class="text-center">Status Dana</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr><td>1</td><td>Drs. H. Supriyadi</td><td>14 Juni 2026</td><td>32 Thn</td><td>Rp 15.000.000</td><td><span class="badge bg-warning">PROSES</span></td></tr>
+                             @foreach($pensiun as $key => $pen)
+                                <tr>
+                                    <td class="text-center">{{ $key + 1 }}</td>
+                                    <td>{{ $pen->user->pegawai->nip ?? '-' }}</td>
+                                    <td><strong>{{ $pen->user->pegawai->nama ?? 'Tidak Diketahui' }}</strong></td>
+                                    <td>{{ $pen->tmt_cpns ? \Carbon\Carbon::parse($pen->tmt_cpns)->translatedFormat('d/m/Y') : '-' }}</td>
+                                    <td>{{ $pen->tmt_pangkat ? \Carbon\Carbon::parse($pen->tmt_pangkat)->translatedFormat('d/m/Y') : '-' }}</td>
+                                    <td><strong>{{ \Carbon\Carbon::parse($pen->tanggal_pensiun)->translatedFormat('d F Y') }}</strong></td>
+                                    <td>{{ $pen->masa_kerja }} Thn</td>
+                                    <td>Rp {{ number_format($pen->total_tunjangan, 0, ',', '.') }}</td>
+                                    <td class="text-center"><span class="badge">{{ strtoupper($pen->status_pembayaran) }}</span></td>
+                                </tr>
+                                @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup Preview</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalPreviewKegiatan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title fw-bold"><i class="bi bi-file-earmark-lock"></i> Preview Modul Data Kegiatan Pegawai</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-3 bg-light border-bottom small text-muted">Berikut adalah simulasi ringkas kerangka tabel keluaran cetak:</div>
+                <div class="table-responsive p-3">
+                    <table class="table table-sm table-bordered table-striped mb-0 text-nowrap" style="font-size: 11px;">
+                        <thead class="table-secondary">
+                           <tr>
+                                <th class="text-center">No</th>
+                                <th >NIP</th>
+                                <th >Nama Pegawai</th>
+                               
+                                <th  class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $no=1;
+                            @endphp
+                             @foreach($kegiatan as $row)
+                <tr>
+                    <td class="text-center">{{ $no ++ }}</td>
+                    <td>{{ $row->nip ?? '-' }}</td>
+                    <td><strong>{{ $row->nama ?? 'Tidak Diketahui' }}</strong></td>
+                    
+                    {{-- Menghitung total data kegiatan yang terikat pada pegawai --}}
+                    
+                    
+                    {{-- Menghitung jumlah kegiatan berdasarkan status masing-masing --}}
+                    <td class="text-center">
+                        {{ $row->status ?? 'Tidak Diketahui' }}
+                    </td>
+                    
+                </tr>
+                @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -305,7 +431,7 @@ function selectReportCard(element) {
         keywordInput.value = '';
     } else {
         keywordContainer.style.display = 'block';
-        if (value === 'pegawai') {
+        if (value === 'pendidikan' || value === 'pensiun' || value === 'kegiatan' ) {
             keywordLabel.innerText = "Berdasarkan Nama / NIP (Opsional)";
             keywordInput.placeholder = "Kosongkan jika ingin mencetak semua data...";
         } else {

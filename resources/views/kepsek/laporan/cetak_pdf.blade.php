@@ -146,6 +146,45 @@
             @endforeach
         </tbody>
     </table>
+      @elseif($jenis == 'kegiatan')
+        <table class="tabel-data" style="width: 100%!important">
+            <thead>
+                <tr>
+                    <th width="4%" class="text-center">No</th>
+                    <th width="15%">NIP</th>
+                    <th width="25%">Nama Pegawai</th>
+                    <th width="15%" class="text-center">Total Input Logbook</th>
+                    <th width="13%" class="text-center">Disetujui</th>
+                    <th width="13%" class="text-center">Pending / Ditinjau</th>
+                    <th width="15%" class="text-center">Ditolak</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($data as $key => $row)
+                <tr>
+                    <td class="text-center">{{ $key + 1 }}</td>
+                    <td>{{ $row->nip ?? '-' }}</td>
+                    <td><strong>{{ $row->nama ?? 'Tidak Diketahui' }}</strong></td>
+                    
+                    {{-- Menghitung total data kegiatan yang terikat pada pegawai --}}
+                    <td class="text-center" style="font-weight: bold;">
+                        {{ $row->kegiatan->count() }} Kegiatan
+                    </td>
+                    
+                    {{-- Menghitung jumlah kegiatan berdasarkan status masing-masing --}}
+                    <td class="text-center" style="color: #198754; font-weight: bold;">
+                        {{ $row->kegiatan->where('status', 'disetujui')->count() }}
+                    </td>
+                    <td class="text-center" style="color: #ffc107; font-weight: bold;">
+                        {{ $row->kegiatan->where('status', 'pending')->count() }}
+                    </td>
+                    <td class="text-center" style="color: #dc3545; font-weight: bold;">
+                        {{ $row->kegiatan->where('status', 'ditolak')->count() }}
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     @endif
 
     <div class="footer-note">
