@@ -200,6 +200,7 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::findOrFail($id);
         
+      
         // Hapus foto dari storage
        
 
