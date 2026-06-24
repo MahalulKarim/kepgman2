@@ -23,7 +23,7 @@ class PegawaiController extends Controller
             ->latest()
             ->when($request->filled('cari_nip'), function ($query) use ($request) {
                 // Filter pencarian berdasarkan NIP (menggunakan LIKE agar pencarian parsial bisa ketemu)
-                return $query->where('nip', 'LIKE', '%' . $request->cari_nip . '%');
+                return $query->where('nip', 'LIKE', '%' . $request->cari_nip . '%')->orWhere('nuptk', 'LIKE', '%' . $request->cari_nip . '%');
             })
             ->get(); // atau bisa diganti ->paginate(10) jika datanya banyak
 
@@ -51,6 +51,7 @@ class PegawaiController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'nip' => 'nullable|string|unique:pegawais,nip',
+            'nuptk' => 'nullable|string|unique:pegawais,nuptk',
             'nama' => 'required|string|max:150',
             
             // Tambahkan validasi untuk jabatan_id di bawah ini
@@ -63,7 +64,14 @@ class PegawaiController extends Controller
             'agama' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Khonghucu',
             'alamat' => 'required|string',
             'no_telp' => 'required|string|max:15',
-            'status_pegawai' => 'required|in:PNS,NON-PNS',
+            'status_pegawai' => 'required',
+            'status_sertifikasi' => 'nullable',
+            'no_sertifikasi' => 'nullable',
+            'serdik_no' => 'nullable',
+            'prodi_terakhir' => 'nullable',
+            'mapel_ampu' => 'nullable',
+            'beban_ajar' => 'nullable',
+            'tugas_tambahan' => 'nullable',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -103,6 +111,7 @@ class PegawaiController extends Controller
             'user_id' => $user->id,
             'jabatan_id' => $request->jabatan_id, // Tambahkan baris ini
             'nip' => $request->nip,
+            'nuptk' => $request->nuptk,
             'nama' => $request->nama,
             'tempat_lahir' => $request->tempat_lahir,
             'tgl_lahir' => $request->tgl_lahir,
@@ -112,6 +121,14 @@ class PegawaiController extends Controller
             'no_telp' => $request->no_telp,
             'status_pegawai' => $request->status_pegawai,
             'foto' => $namaFoto,
+            'status_sertifikasi' => $request->status_sertifikasi,
+            'nomor_sertifikasi' => $request->nomor_sertifikasi,
+            'serdik_no' => $request->serdik_no,
+            'bidang_studi' => $request->bidang_studi,
+            'prodi_terakhir' => $request->prodi_terakhir,
+            'mapel_ampu' => $request->mapel_ampu,
+            'beban_ajar' => $request->beban_ajar,
+            'tugas_tambahan' => $request->tugas_tambahan,
         ]);
 
         return redirect()->route('admin.pegawai.index')->with('success', 'Data pegawai berhasil ditambahkan.');
@@ -128,6 +145,7 @@ class PegawaiController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8',
             'nip' => 'nullable|string|unique:pegawais,nip,' . $pegawai->id,
+            'nuptk' => 'nullable|string|unique:pegawais,nuptk,' . $pegawai->id,
             'nama' => 'required|string|max:150',
             
             // Tambahkan validasi untuk jabatan_id di sini juga
@@ -139,8 +157,15 @@ class PegawaiController extends Controller
             'agama' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Khonghucu',
             'alamat' => 'required|string',
             'no_telp' => 'required|string|max:15',
-            'status_pegawai' => 'required|in:PNS,NON-PNS',
+            'status_pegawai' => 'required',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status_sertifikasi' => 'nullable',
+            'nomor_sertifikasi' => 'nullable',
+            'serdik_no' => 'nullable',
+            'prodi_terakhir' => 'nullable',
+            'mapel_ampu' => 'nullable',
+            'beban_ajar' => 'nullable',
+            'tugas_tambahan' => 'nullable',
         ]);
 
         // Update Akun User
@@ -182,6 +207,7 @@ class PegawaiController extends Controller
         $pegawai->update([
             'jabatan_id' => $request->jabatan_id, // Tambahkan baris ini
             'nip' => $request->nip,
+            'nuptk' => $request->nuptk,
             'nama' => $request->nama,
             'tempat_lahir' => $request->tempat_lahir,
             'tgl_lahir' => $request->tgl_lahir,
@@ -191,6 +217,14 @@ class PegawaiController extends Controller
             'no_telp' => $request->no_telp,
             'status_pegawai' => $request->status_pegawai,
             'foto' => $namaFoto,
+            'status_sertifikasi' => $request->status_sertifikasi,
+            'nomor_sertifikasi' => $request->nomor_sertifikasi,
+            'serdik_no' => $request->serdik_no,
+            'bidang_studi' => $request->bidang_studi,
+            'prodi_terakhir' => $request->prodi_terakhir,
+            'mapel_ampu' => $request->mapel_ampu,
+            'beban_ajar' => $request->beban_ajar,
+            'tugas_tambahan' => $request->tugas_tambahan,
         ]);
 
         return redirect()->route('admin.pegawai.index')->with('success', 'Data pegawai berhasil diperbarui.');

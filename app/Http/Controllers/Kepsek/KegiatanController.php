@@ -66,6 +66,8 @@ class KegiatanController extends Controller
             'status'     => $request->status,
         ]);
 
+        
+
         return redirect()->back()->with('success', 'Catatan kegiatan berhasil diperbarui!');
     }
 
@@ -92,13 +94,16 @@ class KegiatanController extends Controller
         // Ambil SEMUA data kegiatan tanpa pagination agar tercetak seluruhnya di PDF
         $kegiatan = $query->orderBy('tanggal', 'desc')->latest()->get();
 
+        // dd($kegiatan);
+
         // 4. Cari profil nama pegawai untuk penamaan file PDF (Jika filter user_id dipilih)
         $pegawai = null;
         if ($request->filled('user_id')) {
             // Ambil dari model Pegawai berdasarkan user_id-nya
             $pegawai = \App\Models\Pegawai::where('user_id', $request->user_id)->first();
         }
-
+        // dd($pegawai);
+        $kepsek = User::with('pegawai')->where('level',2)->first();
         // Data penunjang untuk dicetak ke file kertas PDF
         $metaData = [
             'tanggal_mulai'   => $request->tanggal_mulai,
@@ -107,7 +112,7 @@ class KegiatanController extends Controller
         ];
 
         // 5. Render ke view khusus format cetak PDF Admin
-        $pdf = Pdf::loadView('kepsek.kegiatan.cetak_pdf', compact('kegiatan', 'pegawai', 'metaData'))
+        $pdf = Pdf::loadView('kepsek.kegiatan.cetak_pdf', compact('kegiatan', 'pegawai', 'metaData','kepsek'))
                     ->setPaper('a4', 'portrait');
 
         // 6. Tentukan nama file secara dinamis

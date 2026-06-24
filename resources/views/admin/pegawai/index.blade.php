@@ -21,7 +21,7 @@ $title = 'Pegawai';
                         <button type="submit" class="btn btn-success btn-sm p-0"><i class="bi bi-search"></i></button>
                     </span>
                     <input type="text" name="cari_nip" class="form-control form-control-sm" 
-                        placeholder="Masukkan NIP Pegawai..." 
+                        placeholder="Masukkan NIP/NUPTK/ID Pegawai..." 
                         value="{{ request('cari_nip') }}">
                     @if(request()->filled('cari_nip'))
                         <a href="{{ route('admin.pegawai.index') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center px-2" title="Reset Pencarian">
@@ -34,7 +34,7 @@ $title = 'Pegawai';
         <div class="col-md-12 pt-2">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    @if(session('success'))
+                    {{-- @if(session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -51,17 +51,28 @@ $title = 'Pegawai';
                             </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
-                    @endif
+                    @endif --}}
 
                     <div class="table-responsive">
                         <table class="table table-striped table-hover align-middle">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama</th>
+                                    <th>Nama Lengkap + Gelar</th>
                                     <th>NIP</th>
+                                    <th>NUPTK/ID</th>
+                                    <th>Jabatan</th>
                                     <th>Foto</th>
                                     <th>Tempat, Tgl Lahir</th>
+                                    <th>Status Pegawai</th>
+                                    {{-- <th>Status Sertifikasi</th>
+                                    <th>NO.Sertifikasi</th>
+                                    <th>NO.Peserta Serdik</th>
+                                    <th>Bidang Studi</th>
+                                    <th>Prodi Terakhir</th>
+                                    <th>Mapel Di Ampu</th> --}}
+                                    <th>Jam Kerja</th>
+                                    <th>Tugas Tambahan</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Agama</th>
                                     <th>Alamat</th>
@@ -74,6 +85,9 @@ $title = 'Pegawai';
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $p->nama }}</td>
                                     <td>{{ $p->nip ?? '-' }}</td>
+                                    <td>{{ $p->nuptk ?? '-' }}</td>
+                                    <td>{{ $p->jabatan->nama_jabatan ?? '-' }}</td>
+                                    
                                     <td>
                                         @if($p->foto)
                                             <img src="{{ asset('foto_pegawai/'.$p->foto) }}" alt="Foto" class="" width="70" height="80" style="object-fit: cover;">
@@ -82,6 +96,15 @@ $title = 'Pegawai';
                                         @endif
                                     </td>
                                     <td>{{ $p->tempat_lahir }}, {{ $p->tgl_lahir }}</td>
+                                    <td>{{ $p->status_pegawai ?? '-' }}</td>
+                                    {{-- <td>{{ $p->status_sertifikasi ?? '-' }}</td>
+                                    <td>{{ $p->nomor_sertifikasi ?? '-' }}</td>
+                                    <td>{{ $p->serdik_no ?? '-' }} no pes</td>
+                                    <td>{{ $p->bidang_studi ?? '-' }} bidang</td>
+                                    <td>{{ $p->prodi_terakhir ?? '-' }} prodi</td>
+                                    <td>{{ $p->mapel_ampu ?? '-' }}</td> --}}
+                                    <td>{{ $p->beban_ajar ?? '-' }}</td>
+                                    <td>{{ $p->tugas_tambahan ?? '-' }}</td>
                                     <td>{{ $p->jenis_kelamin }}</td>
                                     <td>{{ $p->agama }}</td>
                                     <td>{{ $p->alamat }}</td>
@@ -128,13 +151,17 @@ $title = 'Pegawai';
                 <div class="modal-body">
                     <h6 class="pb-1 mb-3 fw-bold border-bottom text-success">Profil Pegawai</h6>
                     <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Nama Lengkap</label>
+                        <div class="col-md-4">
+                            <label class="form-label">Nama Lengkap + Gelar</label>
                             <input type="text" name="nama" class="form-control form_border" required value="{{ old('nama') }}">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label">NIP (Opsional)</label>
                             <input type="text" name="nip" class="form-control form_border" value="{{ old('nip') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">NUPTK / ID (Opsional)</label>
+                            <input type="text" name="nuptk" class="form-control form_border" value="{{ old('nuptk') }}">
                         </div>
                     </div>
                     <div class="row g-3 mb-3">
@@ -173,7 +200,47 @@ $title = 'Pegawai';
                             <select name="status_pegawai" class="form-select form_border" required>
                                 <option value="PNS" {{ old('status_pegawai') == 'PNS' ? 'selected' : '' }}>PNS</option>
                                 <option value="NON-PNS" {{ old('status_pegawai') == 'NON-PNS' ? 'selected' : '' }}>NON-PNS</option>
+                                <option value="GTT" {{ old('status_pegawai') == 'GTT' ? 'selected' : '' }}>GTT</option>
+                                <option value="GTY" {{ old('status_pegawai') == 'GTY' ? 'selected' : '' }}>GTY</option>
+                                <option value="ASN" {{ old('status_pegawai') == 'ASN' ? 'selected' : '' }}>ASN</option>
+                                <option value="PPPK" {{ old('status_pegawai') == 'PPPK' ? 'selected' : '' }}>PPPK</option>
                             </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status Sertifikasi (Opsional)</label>
+                            <select name="status_sertifikasi" class="form-select form_border" >
+                                <option value="sertifikasi" {{ old('status_sertifikasi') == 'Sertifikasi' ? 'selected' : '' }}>Sertifikasi</option>
+                                <option value="belum_sertifikasi" {{ old('status_pegawai') == 'belum_sertifikasi' ? 'selected' : '' }}>Belum Sertifikasi</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">No. Sertifikasi ('Opsional')</label>
+                            <input type="text" name="nomor_sertifikasi" class="form-control form_border"  value="{{ old('nomor_sertifikasi') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">No. Peserta Serdik ('Opsional')</label>
+                            <input type="text" name="serdik_no" class="form-control form_border"  value="{{ old('serdik_no') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Bidang Studi ('Opsional')</label>
+                            <input type="text" name="bidang_studi" class="form-control form_border"  value="{{ old('bidang_studi') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Prodi Terakhir ('Opsional')</label>
+                            <input type="text" name="prodi_terakhir" class="form-control form_border"  value="{{ old('prodi_terakhir') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mapel Diampu ('Opsional')</label>
+                            <input type="text" name="mapel_ampu" class="form-control form_border"  value="{{ old('mapel_ampu') }}">
+                            <small>Pisahkan dengan tanda , (koma) jika lebih dari 1</small>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Jumlah Jam Kerja (Jam) ('Opsional')</label>
+                            <input type="number" name="beban_ajar" class="form-control form_border"  value="{{ old('beban_ajar') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tugas Tambahan ('Opsional')</label>
+                            <input type="text" name="tugas_tambahan" class="form-control form_border"  value="{{ old('tugas_tambahan') }}">
                         </div>
                     </div>
                     <div class="mb-3">
@@ -238,17 +305,19 @@ $title = 'Pegawai';
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                   
-
                   <h6 class="pb-1 mb-3 fw-bold text-success">Profil Pegawai</h6>
                     <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Nama Lengkap</label>
+                        <div class="col-md-4">
+                            <label class="form-label">Nama Lengkap + Gelar</label>
                             <input type="text" name="nama" id="edit_nama_lengkap" class="form-control form_border" required>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label">NIP</label>
                             <input type="text" name="nip" id="edit_nip" class="form-control form_border">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">NUPTK / ID</label>
+                            <input type="text" name="nuptk" id="edit_nuptk" class="form-control form_border">
                         </div>
                     </div>
                     <div class="row g-3 mb-3">
@@ -289,9 +358,48 @@ $title = 'Pegawai';
                             <select name="status_pegawai" id="edit_status_pegawai" class="form-select form_border" required>
                                 <option value="PNS">PNS</option>
                                 <option value="NON-PNS">NON-PNS</option>
+                                <option value="GTT">GTT</option>
+                                <option value="GTY">GTY</option>
+                                <option value="ASN">ASN</option>
+                                <option value="PPPK">PPPK</option>
                             </select>
                         </div>
-                    </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status Sertifikasi (Opsional)</label>
+                            <select name="status_sertifikasi" class="form-select form_border" id="edit_status_sertifikasi">
+                                <option value="sertifikasi" {{ old('status_sertifikasi') == 'Sertifikasi' ? 'selected' : '' }}>Sertifikasi</option>
+                                <option value="belum_sertifikasi" {{ old('status_pegawai') == 'belum_sertifikasi' ? 'selected' : '' }}>Belum Sertifikasi</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">No. Sertifikasi ('Opsional')</label>
+                            <input type="text" name="nomor_sertifikasi" class="form-control form_border"  value="{{ old('nomor_sertifikasi') }}" id="edit_nomor_sertifikasi">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">No. Peserta Serdik ('Opsional')</label>
+                            <input type="text" name="serdik_no" class="form-control form_border"  value="{{ old('serdik_no') }}"id="edit_serdik_no">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Bidang Studi ('Opsional')</label>
+                            <input type="text" name="bidang_studi" class="form-control form_border"  value="{{ old('bidang_studi') }}"id="edit_bidang_studi">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Prodi Terakhir ('Opsional')</label>
+                            <input type="text" name="prodi_terakhir" class="form-control form_border"  value="{{ old('prodi_terakhir') }}" id="edit_prodi_terakhir">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mapel Diampu ('Opsional')</label>
+                            <input type="text" name="mapel_ampu" class="form-control form_border"  value="{{ old('mapel_ampu') }}" id="edit_mapel_ampu">
+                            <small>Pisahkan dengan tanda , (koma) jika lebih dari 1</small>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Jumlah Jam Kerja (Jam) ('Opsional')</label>
+                            <input type="number" name="beban_ajar" class="form-control form_border"  value="{{ old('beban_ajar') }}" id="edit_jam_ajar">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Tugas Tambahan ('Opsional')</label>
+                            <input type="text" name="tugas_tambahan" class="form-control form_border"  value="{{ old('tugas_tambahan') }}" id="edit_tugas_tambahan">
+                        </div>
                     <div class="mb-3">
                         <label class="form-label">Alamat Rumah</label>
                         <textarea name="alamat" id="edit_alamat" class="form-control form_border" rows="2" required></textarea>
@@ -401,6 +509,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     
                     document.getElementById('edit_nama_lengkap').value = data.nama ?? '';
                     document.getElementById('edit_nip').value = data.nip ?? '';
+                    document.getElementById('edit_nuptk').value = data.nuptk ?? '';
                     document.getElementById('edit_tempat_lahir').value = data.tempat_lahir ?? '';
                     document.getElementById('edit_tgl_lahir').value = data.tgl_lahir ?? '';
                     document.getElementById('edit_jenis_kelamin').value = data.jenis_kelamin ?? '';
@@ -409,6 +518,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('edit_status_pegawai').value = data.status_pegawai ?? '';
                     document.getElementById('edit_alamat').value = data.alamat ?? '';
                     document.getElementById('edit_jabatan_id').value = data.jabatan_id ?? '';
+
+
+                    document.getElementById('edit_status_sertifikasi').value = data.status_sertifikasi ?? '';
+
+                    document.getElementById('edit_nomor_sertifikasi').value = data.nomor_sertifikasi ?? '';
+                    document.getElementById('edit_serdik_no').value = data.serdik_no ?? '';
+                    document.getElementById('edit_bidang_studi').value = data.bidang_studi ?? '';
+                    document.getElementById('edit_prodi_terakhir').value = data.prodi_terakhir ?? '';
+                    document.getElementById('edit_mapel_ampu').value = data.mapel_ampu ?? '';
+                    document.getElementById('edit_jam_ajar').value = data.beban_ajar ?? '';
+                    
+                    document.getElementById('edit_tugas_tambahan').value = data.tugas_tambahan ?? '';
                     
                     // Render Preview Foto Lama pada Modal Edit
                     const previewDiv = document.getElementById('preview_foto');

@@ -142,8 +142,15 @@ class PegawaiController extends Controller
             'agama' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Khonghucu',
             'alamat' => 'required|string',
             'no_telp' => 'required|string|max:15',
-            'status_pegawai' => 'required|in:PNS,NON-PNS',
+            'status_pegawai' => 'required',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status_sertifikasi' => 'nullable',
+            'nomor_sertifikasi' => 'nullable',
+            'serdik_no' => 'nullable',
+            'prodi_terakhir' => 'nullable',
+            'mapel_ampu' => 'nullable',
+            'beban_ajar' => 'nullable',
+            'tugas_tambahan' => 'nullable',
         ]);
 
        
@@ -186,6 +193,14 @@ class PegawaiController extends Controller
             'no_telp' => $request->no_telp,
             'status_pegawai' => $request->status_pegawai,
             'foto' => $namaFoto,
+             'status_sertifikasi' => $request->status_sertifikasi,
+            'nomor_sertifikasi' => $request->nomor_sertifikasi,
+            'serdik_no' => $request->serdik_no,
+            'bidang_studi' => $request->bidang_studi,
+            'prodi_terakhir' => $request->prodi_terakhir,
+            'mapel_ampu' => $request->mapel_ampu,
+            'beban_ajar' => $request->beban_ajar,
+            'tugas_tambahan' => $request->tugas_tambahan,
         ]);
        
         return redirect()->route('pegawai.pegawai.index')->with('success', 'Data pegawai berhasil diperbarui.');

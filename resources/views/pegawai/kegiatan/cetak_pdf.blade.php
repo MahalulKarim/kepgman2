@@ -135,9 +135,11 @@
             <td><strong>{{ $pegawai->nama ?? Auth::user()->name }}</strong></td>
         </tr>
         <tr>
-            <td class="label">NIP / ID</td>
+            <td class="label">
+                    NIP/NUPTK/ID
+                </th>
             <td class="titik">:</td>
-            <td>{{ $pegawai->nip ?? '-' }}</td>
+                 <td>{{ $pegawai->nip ?? '-' }} / {{ $pegawai->nuptk ?? '-' }}</td>
         </tr>
         <tr>
             <td class="label">Jabatan Utama</td>
@@ -200,18 +202,19 @@
                 <td>
                     {{-- Sisi Kiri: Atasan/Verifikator (Kosongkan jika hanya butuh tanda tangan pegawai) --}}
                     <p>Mengetahui,</p>
-                    <p>Kepala Urusan Tata Usaha</p>
+                    <p>Kepala Sekolah MAN 2 Wonosobo</p>
                     <div class="space-ttd"></div>
-                    <p>_______________________</p>
-                    <p class="text-muted" style="font-size: 10px;">NIP. .........................</p>
+                    <p>{{ $kepsek->pegawai->nama ?? '-' }}</p>
+                    <p class="text-muted" style="font-size: 10px;">NIP/NUPTK/ID .{{ $kepsek->pegawai->nip ??  '-' }}/{{ $kepsek->pegawai->nuptk ??  '-' }}</p>
                 </td>
                 <td>
                     {{-- Sisi Kanan: Pegawai Terkait --}}
                     <p>Wonosobo, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
                     <p>Pegawai yang bersangkutan,</p>
                     <div class="space-ttd"></div>
-                    <p><strong>{{ $pegawai->nama ?? Auth::user()->name }}</strong></p>
-                    <p style="font-size: 11px;">NIP. {{ $pegawai->nip ?? '.........................' }}</p>
+                    <p><strong>{{ $pegawai->nama ?? '-' }}</strong></p>
+                    <p style="font-size: 11px;">NIP/NUPTK/ID. {{ $pegawai->nip ?? '.........................' }} / {{ $pegawai->nuptk ?? '.........................' }}</p>
+              
                 </td>
             </tr>
         </table>

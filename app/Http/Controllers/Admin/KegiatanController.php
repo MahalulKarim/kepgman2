@@ -96,6 +96,9 @@ class KegiatanController extends Controller
             $pegawai = \App\Models\Pegawai::where('user_id', $request->user_id)->first();
         }
 
+        $kepsek = User::with('pegawai')->where('level',2)->first();
+
+        // dd($kepsek);
         // Data penunjang untuk dicetak ke file kertas PDF
         $metaData = [
             'tanggal_mulai'   => $request->tanggal_mulai,
@@ -104,7 +107,7 @@ class KegiatanController extends Controller
         ];
 
         // 5. Render ke view khusus format cetak PDF Admin
-        $pdf = Pdf::loadView('admin.kegiatan.cetak_pdf', compact('kegiatan', 'pegawai', 'metaData'))
+        $pdf = Pdf::loadView('admin.kegiatan.cetak_pdf', compact('kegiatan', 'pegawai', 'metaData','kepsek'))
                     ->setPaper('a4', 'portrait');
 
         // 6. Tentukan nama file secara dinamis
