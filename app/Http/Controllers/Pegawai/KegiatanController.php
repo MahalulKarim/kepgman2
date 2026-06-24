@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pegawai;
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
 use App\Models\Pegawai;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -96,9 +97,10 @@ class KegiatanController extends Controller
             'tanggal_mulai'   => $request->tanggal_mulai,
             'tanggal_selesai' => $request->tanggal_selesai,
         ];
-
+        $kepsek = User::with('pegawai')->where('level',2)->first();
+        
         // 5. Render ke view khusus format cetak PDF
-        $pdf = Pdf::loadView('pegawai.kegiatan.cetak_pdf', compact('kegiatan', 'pegawai', 'metaData'))
+        $pdf = Pdf::loadView('pegawai.kegiatan.cetak_pdf', compact('kegiatan', 'pegawai', 'metaData','kepsek'))
                 ->setPaper('a4', 'portrait');
 
         // 6. Alirkan file dokumen langsung ke browser tab baru

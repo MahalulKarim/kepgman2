@@ -16,6 +16,7 @@ class Pegawai extends Model
         'user_id',
         'jabatan_id',
         'nip',
+        'nuptk',
         'nama',
         'tempat_lahir',
         'tgl_lahir',
@@ -25,6 +26,14 @@ class Pegawai extends Model
         'no_telp',
         'foto',
         'status_pegawai',
+        'status_sertifikasi',
+        'nomor_sertifikasi',
+        'serdik_no',
+        'bidang_studi',
+        'prodi_terakhir',
+        'mapel_ampu',
+        'beban_ajar',
+        'tugas_tambahan',
     ];
 
     /**

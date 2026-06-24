@@ -125,25 +125,29 @@
     </div>
 
     <div class="judul-laporan">
-        Laporan Rekapitulasi Kegiatan Harian Pegawai
+       Laporan Rekapitulasi Kegiatan Harian @if (empty($pegawai->nama)) Semua @else @endif Pegawai
     </div>
 
     <table class="tabel-identitas">
+       @if (empty($pegawai->nama))
+            
+        @else
         <tr>
             <td class="label">Nama Pegawai</td>
             <td class="titik">:</td>
-            <td><strong>{{ $pegawai->nama ?? Auth::user()->name }}</strong></td>
+            <td><strong>{{ $pegawai->nama ?? '-' }}</strong></td>
         </tr>
         <tr>
-            <td class="label">NIP / ID</td>
+            <td class="label">NIP / NUPTK / ID</td>
             <td class="titik">:</td>
-            <td>{{ $pegawai->nip ?? '-' }}</td>
+            <td>{{ $pegawai->nip ?? '-' }} / {{ $pegawai->nuptk ?? '-' }}</td>
         </tr>
         <tr>
             <td class="label">Jabatan Utama</td>
             <td class="titik">:</td>
-            <td>{{ $pegawai->jabatan->nama_jabatan ?? 'Umum' }}</td>
+            <td>{{ $pegawai->jabatan->nama_jabatan ?? '-' }}</td>
         </tr>
+        @endif
         <tr>
             <td class="label">Periode Laporan</td>
             <td class="titik">:</td>
@@ -161,8 +165,18 @@
 
     <table class="tabel-data">
         <thead>
-            <tr>
+           <tr>
                 <th width="5%">No</th>
+                @if (empty($pegawai->nama))
+                <th>
+                    NIP/NUPTK/ID
+                </th>
+                <th>
+                    Nama Pegawai
+                </th>
+                @else
+                    
+                @endif
                 <th width="15%">Tanggal</th>
                 <th width="15%">Waktu / Jam</th>
                 <th width="25%">Nama Kegiatan</th>
@@ -174,6 +188,16 @@
             @forelse($kegiatan as $key => $item)
                 <tr>
                     <td class="text-center">{{ $key + 1 }}</td>
+                     @if (empty($pegawai->nama))
+                       <td>
+                        {{ $item->user->pegawai->nip ??  '-'}} / {{ $item->user->pegawai->nuptk ?? '-' }}
+                       </td>
+                       <td>
+                        {{ $item->user->pegawai->nama }}
+                       </td>
+                    @else
+                        
+                    @endif
                     <td class="text-center">
                         {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d-m-Y') }}
                     </td>
@@ -200,18 +224,18 @@
                 <td>
                     {{-- Sisi Kiri: Atasan/Verifikator (Kosongkan jika hanya butuh tanda tangan pegawai) --}}
                     <p>Mengetahui,</p>
-                    <p>Kepala Urusan Tata Usaha</p>
+                    <p>Kepala Sekolah MAN 2 Wonosobo</p>
                     <div class="space-ttd"></div>
-                    <p>_______________________</p>
-                    <p class="text-muted" style="font-size: 10px;">NIP. .........................</p>
+                    <p>{{ $kepsek->pegawai->nama ?? '-' }}</p>
+                    <p class="text-muted" style="font-size: 10px;">NIP/NUPTK/ID .{{ $kepsek->pegawai->nip ??  '-' }}/{{ $kepsek->pegawai->nuptk ??  '-' }}</p>
                 </td>
                 <td>
                     {{-- Sisi Kanan: Pegawai Terkait --}}
                     <p>Wonosobo, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y') }}</p>
                     <p>Pegawai yang bersangkutan,</p>
                     <div class="space-ttd"></div>
-                    <p><strong>{{ $pegawai->nama ?? Auth::user()->name }}</strong></p>
-                    <p style="font-size: 11px;">NIP. {{ $pegawai->nip ?? '.........................' }}</p>
+                    <p><strong>{{ $pegawai->nama ?? '-' }}</strong></p>
+                    <p style="font-size: 11px;">NIP/NUPTK/ID. {{ $pegawai->nip ?? '.........................' }} / {{ $pegawai->nuptk ?? '.........................' }}</p>
                 </td>
             </tr>
         </table>

@@ -17,7 +17,11 @@ class Pensiun extends Model
         'id_user',
         'tmt_cpns',
         'tmt_pangkat',
+        'tmt_golongan',
+        'golongan',
+        'tmt_jabatan',
         'tanggal_pensiun',
+        'jenis_pensiun',
         'masa_kerja',
         'total_tunjangan',
         'status_pembayaran'
