@@ -22,7 +22,7 @@ class KegiatanController extends Controller
             $query->whereBetween('tanggal', [$request->tanggal_mulai, $request->tanggal_selesai]);
         }
 
-        $kegiatan = $query->orderBy('tanggal', 'desc')->latest()->paginate(10);
+        $kegiatan = $query->orderBy('tanggal', 'asc')->latest()->paginate(10);
 
         return view('pegawai.kegiatan.index', compact('kegiatan'));
     }
