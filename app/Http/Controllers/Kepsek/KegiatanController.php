@@ -92,7 +92,7 @@ class KegiatanController extends Controller
         }
 
         // Ambil SEMUA data kegiatan tanpa pagination agar tercetak seluruhnya di PDF
-        $kegiatan = $query->orderBy('tanggal', 'desc')->latest()->get();
+        $kegiatan = $query->orderBy('tanggal', 'asc')->latest()->get();
 
         // dd($kegiatan);
 

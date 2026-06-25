@@ -87,7 +87,7 @@ class KegiatanController extends Controller
         }
 
         // Ambil SEMUA data kegiatan tanpa pagination agar tercetak seluruhnya di PDF
-        $kegiatan = $query->orderBy('tanggal', 'desc')->latest()->get();
+        $kegiatan = $query->orderBy('tanggal', 'asc')->latest()->get();
 
         // 4. Cari profil nama pegawai untuk penamaan file PDF (Jika filter user_id dipilih)
         $pegawai = null;
