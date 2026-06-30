@@ -110,8 +110,9 @@
                             </span>
                         @enderror
                     </div>
+                    
 
-                    {{-- <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                             <label class="form-check-label small text-muted" for="remember">
@@ -123,7 +124,7 @@
                                 Lupa Sandi?
                             </a>
                         @endif
-                    </div> --}}
+                    </div>
 
                     <div class="d-grid gap-2 mb-3">
                         <button type="submit" class="btn btn-success py-2.5 fw-bold shadow-sm rounded">
