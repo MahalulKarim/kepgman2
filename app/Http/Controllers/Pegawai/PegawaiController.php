@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pegawai;
 use App\Http\Controllers\Controller;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
+use App\Models\Pensiun;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -202,7 +203,25 @@ class PegawaiController extends Controller
             'beban_ajar' => $request->beban_ajar,
             'tugas_tambahan' => $request->tugas_tambahan,
         ]);
-       
+        $pensiun = Pensiun::where('id_user', $pegawai->user_id)->first();
+
+        // Jika data pensiun ditemukan dan input tgl_lahir tidak kosong
+        if ($pensiun && $request->tgl_lahir) {
+            
+            // Ambil masa_kerja dari tabel pensiun dan jadikan integer
+            $umur_pensiun = (int) $pensiun->masa_kerja;
+
+            // Hitung tanggal pensiun: Tanggal Lahir + Masa Kerja (Tahun)
+            $tanggal_pensiun = \Carbon\Carbon::parse($request->tgl_lahir)
+                ->addYears($umur_pensiun)
+                ->format('Y-m-d');
+
+            // 3. Jalankan Update khusus untuk tanggal_pensiun
+            $pensiun->update([
+                'tanggal_pensiun' => $tanggal_pensiun
+            ]);
+        }
+        
         return redirect()->route('pegawai.pegawai.index')->with('success', 'Data pegawai berhasil diperbarui.');
     }
 

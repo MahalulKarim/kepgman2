@@ -70,11 +70,11 @@
       <h4>Dashboard</h4>
     </a>
     <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item text-center">
+      {{-- <li class="nav-item text-center">
         <a href="{{ route('kepsek.dashboard') }}" class="nav-link text-white {{($title=='Dashboard')? 'active':''}}" aria-current="page">
           Dashboard
         </a>
-      </li>
+      </li> --}}
       <li class="nav-item text-center">
         <a href="{{ route('kepsek.kegiatan.index') }}" class="nav-link text-white {{($title=='Kegiatan')? 'active':''}}" aria-current="page">
           Data Kegiatan Harian Pegawai
