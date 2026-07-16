@@ -18,8 +18,8 @@
   <body>
    
     <style>
-      .nav-item .active{
-        background-color: #0eb538!important;
+       .nav-item .active{
+        background-color: #0e72b5!important;
         color: #ffffff!important;
       }
       .form_border {
@@ -60,10 +60,10 @@
 
  
 
-  <div class="d-flex flex-column flex-shrink-0 p-3 d-flex h-100 bg-success" style="width: 18%;height: 100vh!important;position: fixed;">
+  <div class="d-flex flex-column flex-shrink-0 p-3 d-flex h-100 bg-white" style="width: 18%;height: 100vh!important;position: fixed;">
     <a href="/" class="text-center d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
     </a>
-    <a href="{{ route('kepsek.dashboard') }}" class="text-center text-decoration-none text-white">
+    <a href="{{ route('kepsek.dashboard') }}" class="text-center text-decoration-none text-dark">
       <h1 style="font-size: 65px;">
         <i class="bi bi-person-circle"></i>
       </h1>
@@ -71,43 +71,43 @@
     </a>
     <ul class="nav nav-pills flex-column mb-auto">
       {{-- <li class="nav-item text-center">
-        <a href="{{ route('kepsek.dashboard') }}" class="nav-link text-white {{($title=='Dashboard')? 'active':''}}" aria-current="page">
+        <a href="{{ route('kepsek.dashboard') }}" class="nav-link text-dark {{($title=='Dashboard')? 'active':''}}" aria-current="page">
           Dashboard
         </a>
       </li> --}}
       <li class="nav-item text-center">
-        <a href="{{ route('kepsek.kegiatan.index') }}" class="nav-link text-white {{($title=='Kegiatan')? 'active':''}}" aria-current="page">
+        <a href="{{ route('kepsek.kegiatan.index') }}" class="nav-link text-dark {{($title=='Kegiatan')? 'active':''}}" aria-current="page">
           Data Kegiatan Harian Pegawai
         </a>
       </li> 
        <li class="nav-item text-center">
-        <a href="{{ route('kepsek.laporan.index') }}" class="nav-link text-white {{($title=='Laporan')? 'active':''}}" aria-current="page">
+        <a href="{{ route('kepsek.laporan.index') }}" class="nav-link text-dark {{($title=='Laporan')? 'active':''}}" aria-current="page">
           Data Laporan
         </a>
       </li>
 
       {{-- <li class="nav-item text-center">
-        <a href="{{ route('admin.pegawai.index') }}" class="nav-link text-white {{($title=='Pegawai')? 'active':''}}" aria-current="page">
+        <a href="{{ route('admin.pegawai.index') }}" class="nav-link text-dark {{($title=='Pegawai')? 'active':''}}" aria-current="page">
           Data Pegawai
         </a>
       </li> --}}
       {{-- <li class="nav-item text-center">
-        <a href="{{ route('admin.jabatan.index') }}" class="nav-link text-white {{($title=='Jabatan')? 'active':''}}" aria-current="page">
+        <a href="{{ route('admin.jabatan.index') }}" class="nav-link text-dark {{($title=='Jabatan')? 'active':''}}" aria-current="page">
           Data Jabatan
         </a>
       </li>
       <li class="nav-item text-center">
-        <a href="{{ route('admin.pendidikan.index') }}" class="nav-link text-white {{($title=='Riwayat Pendidikan')? 'active':''}}" aria-current="page">
+        <a href="{{ route('admin.pendidikan.index') }}" class="nav-link text-dark {{($title=='Riwayat Pendidikan')? 'active':''}}" aria-current="page">
           Data Riwayat Pendidikan / Pelatihan
         </a>
       </li>
       <li class="nav-item text-center">
-        <a href="{{ route('admin.pensiun.index') }}" class="nav-link text-white {{($title=='Pensiun')? 'active':''}}" aria-current="page">
+        <a href="{{ route('admin.pensiun.index') }}" class="nav-link text-dark {{($title=='Pensiun')? 'active':''}}" aria-current="page">
           Data Pensiun
         </a>
       </li>
       <li class="nav-item text-center">
-        <a href="{{ route('admin.laporan.index') }}" class="nav-link text-white {{($title=='Laporan')? 'active':''}}" aria-current="page">
+        <a href="{{ route('admin.laporan.index') }}" class="nav-link text-dark {{($title=='Laporan')? 'active':''}}" aria-current="page">
           Data Laporan
         </a>
       </li>

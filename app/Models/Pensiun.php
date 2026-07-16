@@ -24,6 +24,9 @@ class Pensiun extends Model
         'jenis_pensiun',
         'masa_kerja',
         'total_tunjangan',
+        'berkas',
+        'status',
+        'keterangan_berkas',
         'status_pembayaran'
     ];
 

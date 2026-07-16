@@ -3,7 +3,7 @@
 $title = 'Dashboard';
 @endphp
 @section('content')
-<div class="col-lg-12 bg-success p-4 text-white">
+<div class="col-lg-12 bg-white p-4 text-primary">
     <h2>
         Selamat Datang Admin
     </h2>

@@ -84,7 +84,8 @@ $title = 'Kegiatan';
                                  <th >Waktu & Tanggal</th>
                                  <th >Pegawai</th>
                                  <th >Nama Kegiatan</th>
-                                 <th >Deskripsi Detail</th>
+                                 <th >Deskripsi</th>
+                                 <th >Foto Kegiatan</th>
                                  <th  class="text-center">Status</th>
                                  <th  class="text-center pe-3">Aksi</th>
                              </tr>
@@ -108,6 +109,20 @@ $title = 'Kegiatan';
                                              {{ $item->deskripsi }}
                                          </div>
                                      </td>
+                                      <td>
+                                        {{-- MENAMPILKAN FOTO KEGIATAN --}}
+                                        @if(!empty($item->foto))
+                                            <a href="{{ asset('kegiatan_pegawai/' . $item->foto) }}" target="_blank">
+                                                <img src="{{ asset('kegiatan_pegawai/' . $item->foto) }}" 
+                                                    alt="Foto Kegiatan" 
+                                                    class="img-thumbnail" 
+                                                    style="max-height: 60px; max-width: 100px; object-fit: cover;"
+                                                    title="Klik untuk memperbesar">
+                                            </a>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
                                      <td class="text-center">
                                          @if($item->status == 'disetujui')
                                              <span class="badge bg-success bg-opacity-10 text-white border border-success px-2 py-1">Disetujui</span>

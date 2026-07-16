@@ -32,6 +32,7 @@ Route::get('', function () {
         Route::resource('pegawai', AdminPegawai::class);
         Route::resource('jabatan', AdminJabatan::class);
         Route::resource('pendidikan', AdminRiwayatPendidikan::class);
+        Route::post('pensiun/{id}/verifikasi', [AdminPensiun::class,'verifikasiBerkas']);
         Route::resource('pensiun', AdminPensiun::class);
          Route::get('/kegiatan/cetak', [AdminKegiatan::class, 'cetakPdf'])->name('kegiatan.cetak');
         Route::resource('kegiatan', AdminKegiatan::class);

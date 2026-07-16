@@ -128,6 +128,25 @@ public function index(Request $request)
 
         return redirect()->route('admin.pensiun.index')->with('success', 'Data pensiun berhasil diperbarui!');
     }
+    public function verifikasiBerkas(Request $request, $id)
+    {
+        $pensiun = Pensiun::findOrFail($id);
+
+        $request->validate([
+            'status'            => 'required|in:Sudah Verifikasi,Belum Verifikasi',
+            'keterangan_berkas' => 'required_if:status,Belum Verifikasi|nullable|string',
+        ]);
+
+        // Jika disetujui, kosongkan teks keterangan berkas lama agar bersih
+        $keterangan = $request->status == 'Sudah Verifikasi' ? null : $request->keterangan_berkas;
+
+        $pensiun->update([
+            'status'            => $request->status,
+            'keterangan_berkas' => $keterangan
+        ]);
+
+        return redirect()->back()->with('success', 'Status verifikasi berkas berhasil diperbarui!');
+    }
 
     public function destroy($id)
     {

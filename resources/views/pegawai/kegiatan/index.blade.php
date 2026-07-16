@@ -55,6 +55,7 @@ $title = 'Kegiatan';
                                  <th width="15%">Waktu & Tanggal</th>
                                  <th width="25%">Nama Kegiatan</th>
                                  <th width="35%">Deskripsi Detail</th>
+                                 <th width="35%">Foto Kegiatan</th>
                                  <th width="10%" class="text-center">Status</th>
                                  <th width="10%" class="text-center pe-3">Aksi</th>
                              </tr>
@@ -71,11 +72,26 @@ $title = 'Kegiatan';
                                          </span>
                                      </td>
                                      <td><span class="fw-semibold text-dark">{{ $item->nama_kegiatan }}</span></td>
+                                     
                                      <td>
                                          <div class="text-secondary text-truncate" style="max-width: 320px;" title="{{ $item->deskripsi }}">
                                              {{ $item->deskripsi }}
                                          </div>
                                      </td>
+                                     <td>
+                                        {{-- MENAMPILKAN FOTO KEGIATAN --}}
+                                        @if(!empty($item->foto))
+                                            <a href="{{ asset('kegiatan_pegawai/' . $item->foto) }}" target="_blank">
+                                                <img src="{{ asset('kegiatan_pegawai/' . $item->foto) }}" 
+                                                    alt="Foto Kegiatan" 
+                                                    class="img-thumbnail" 
+                                                    style="max-height: 60px; max-width: 100px; object-fit: cover;"
+                                                    title="Klik untuk memperbesar">
+                                            </a>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
                                      <td class="text-center">
                                           @if($item->status == 'disetujui')
                                              <span class="badge bg-success bg-opacity-10 text-white border border-success px-2 py-1">Disetujui</span>
@@ -101,13 +117,24 @@ $title = 'Kegiatan';
                                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     
-                                                    <form action="{{ route('pegawai.kegiatan.update',$item->id) }}" method="POST">
+                                                    <form action="{{ route('pegawai.kegiatan.update',$item->id) }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="modal-body p-4">
-                                                            <div class="mb-3">
-                                                                <label class="form-label fw-bold small text-secondary">Tanggal Kegiatan</label>
-                                                                <input type="date" name="tanggal" id="input_tanggal" class="form-control" required value="{{ $item->tanggal }}">
+                                                            <div class="row">
+                                                                <div class="col-lg-6">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label fw-bold small text-secondary">Tanggal Kegiatan</label>
+                                                                        <input type="date" name="tanggal" id="input_tanggal" class="form-control" required value="{{ $item->tanggal }}">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label fw-bold small text-secondary">Foto Kegiatan</label>
+                                                                        <input type="file" name="foto" id="input_foto" class="form-control" accept="image/*" required>
+                                                                        <div class="form-text text-muted" style="font-size: 0.8rem;">*Hanya menerima format gambar (JPG, JPEG, PNG).</div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
                                                             <div class="row g-3 mb-3">
@@ -183,14 +210,26 @@ $title = 'Kegiatan';
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             
-            <form id="formKegiatan" action="{{ route('pegawai.kegiatan.store') }}" method="POST">
+            <form id="formKegiatan" action="{{ route('pegawai.kegiatan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div id="method-container"></div>
 
                 <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small text-secondary">Tanggal Kegiatan</label>
-                        <input type="date" name="tanggal" id="input_tanggal" class="form-control" required value="{{ date('Y-m-d') }}">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-secondary">Tanggal Kegiatan</label>
+                                <input type="date" name="tanggal" id="input_tanggal" class="form-control" required value="{{ date('Y-m-d') }}">
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-secondary">Foto Kegiatan</label>
+                                <input type="file" name="foto" id="input_foto" class="form-control" accept="image/*" required>
+                                <div class="form-text text-muted" style="font-size: 0.8rem;">*Hanya menerima format gambar (JPG, JPEG, PNG).</div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row g-3 mb-3">

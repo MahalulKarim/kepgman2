@@ -37,7 +37,18 @@ class KegiatanController extends Controller
             'nama_kegiatan' => 'required|string|max:255',
             'deskripsi'     => 'required|string',
         ]);
+        $namaFoto = null;
 
+            if ($request->hasFile('foto')) {
+                $foto = $request->file('foto');
+                
+                // Bersihkan nama file dari spasi agar aman di URL
+                $namaOriginal = str_replace(' ', '_', $foto->getClientOriginalName());
+                $namaFoto = time() . '_' . $namaOriginal;
+                
+                // Pindahkan file langsung ke folder
+                $foto->move(public_path('kegiatan_pegawai'), $namaFoto);
+            }
         // Menyimpan data dengan mengunci user_id otomatis dari session login
         Kegiatan::create([
             'user_id'       => Auth::id(),
@@ -46,6 +57,7 @@ class KegiatanController extends Controller
             'jam_selesai'       => $request->jam_selesai,
             'nama_kegiatan' => $request->nama_kegiatan,
             'deskripsi'     => $request->deskripsi,
+            'foto'     => $namaFoto,
             'status'        => 'pending', // otomatis berstatus pending sebelum divalidasi
         ]);
 
@@ -66,12 +78,33 @@ class KegiatanController extends Controller
             'deskripsi'     => 'required|string',
         ]);
 
+
+         $namaFoto = $kegiatan->foto;
+
+        if ($request->hasFile('foto')) {
+            // 1. Hapus foto lama langsung dari folder public (jika ada)
+            if ($kegiatan->foto && file_exists(public_path('kegiatan_pegawai/' . $kegiatan->foto))) {
+                unlink(public_path('kegiatan_pegawai/' . $kegiatan->foto));
+            }
+            
+            $foto = $request->file('foto');
+            // 2. Buat nama file yang aman tanpa spasi
+            $namaOriginal = str_replace(' ', '_', $foto->getClientOriginalName());
+            $namaFoto = time() . '_' . $namaOriginal;
+            
+            // 3. Pindahkan file langsung ke folder public/kegiatan_pegawai
+            // Perintah ini akan otomatis membuat folder 'kegiatan_pegawai' jika belum ada
+            $foto->move(public_path('kegiatan_pegawai'), $namaFoto);
+        }
+        
+
         $kegiatan->update([
             'tanggal'       => $request->tanggal,
              'jam_mulai'       => $request->jam_mulai,
             'jam_selesai'       => $request->jam_selesai,
             'nama_kegiatan' => $request->nama_kegiatan,
             'deskripsi'     => $request->deskripsi,
+             'foto'     => $namaFoto,
         ]);
 
         return redirect()->back()->with('success', 'Catatan kegiatan berhasil diperbarui!');

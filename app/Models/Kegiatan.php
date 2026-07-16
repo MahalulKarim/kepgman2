@@ -19,6 +19,7 @@ class Kegiatan extends Model
         'jam_selesai',
         'nama_kegiatan',
         'deskripsi',
+        'foto',
         'status',
     ];
 
