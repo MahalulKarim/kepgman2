@@ -61,6 +61,7 @@ $title = 'Pensiun';
                                     <th>No Hp</th>
                                     <th>TMT CPNS</th>
                                     <th>TMT Pangkat</th>
+                                    <th>Berkas Pensiun</th>
                                     {{-- <th>Masa Kerja</th>
                                     <th>Total Tunjangan</th>
                                     <th>Status Pembayaran</th> --}}
@@ -104,6 +105,40 @@ $title = 'Pensiun';
         <td>{{ $p->tmt_cpns ? \Carbon\Carbon::parse($p->tmt_cpns)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
         <td>{{ $p->tmt_pangkat ? \Carbon\Carbon::parse($p->tmt_pangkat)->locale('id')->translatedFormat('d F Y') : '-' }}</td>
         
+        <td class="text-center">
+            @if ($p->status == 'Sudah Verifikasi')
+                <span class="badge bg-success">{{ $p->status }}</span>
+            @else
+                <span class="badge bg-danger">{{ $p->status }}</span>
+                <hr class="my-1">
+                <b>Keterangan:</b> <br>
+                <span class="text-muted">{{ $p->keterangan_berkas ?? '-' }}</span>
+            @endif
+
+            {{-- TOMBOL LIHAT BERKAS --}}
+            @if (!empty($p->berkas))
+                <div class="mt-2">
+                    <a href="{{ asset('file_pegawai/' . $p->berkas) }}" 
+                    target="_blank" 
+                    class="btn btn-primary btn-sm w-100 mb-1">
+                        <i class="fas fa-eye"></i> Lihat Berkas
+                    </a>
+                </div>
+            @endif
+
+            {{-- TOMBOL AKSI VERIFIKASI ADMIN --}}
+            @if ($p->status != 'Sudah Verifikasi')
+                <div>
+                    <button type="button" 
+                            class="btn btn-warning btn-sm w-100 btn-verifikasi"
+                            data-id="{{ $p->id }}"
+                            data-status="{{ $p->status }}"
+                            data-keterangan="{{ $p->keterangan_berkas }}">
+                        <i class="fas fa-check-circle"></i> Verifikasi
+                    </button>
+                </div>
+            @endif
+        </td>
         <td class="text-center">
             <div class="d-flex gap-1">
                 <button type="button" class="btn btn-sm btn-info text-white btn-edit" data-id="{{ $p->id }}">Edit / Detail</button>
@@ -299,6 +334,42 @@ $title = 'Pensiun';
     </div>
 </div>
 
+<div class="modal fade" id="modalVerifikasi" tabindex="-1" aria-labelledby="modalVerifikasiLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formVerifikasi" method="POST">
+                @csrf
+                {{-- @method('PUT') --}}
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalVerifikasiLabel">Form Verifikasi Berkas</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{-- Pilihan Status --}}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status Verifikasi</label>
+                        <select name="status" id="verifikasi_status" class="form-select" required>
+                            <option value="Sudah Verifikasi">Sudah Verifikasi (Setujui)</option>
+                            <option value="Belum Verifikasi">Belum Verifikasi (Tolak)</option>
+                        </select>
+                    </div>
+
+                    {{-- Input Keterangan (Disembunyikan secara default) --}}
+                    <div class="mb-3" id="container_keterangan" style="display: none;">
+                        <label class="form-label fw-bold">Keterangan / Alasan Penolakan</label>
+                        <textarea name="keterangan_berkas" id="verifikasi_keterangan" class="form-control" rows="3" placeholder="Masukkan alasan berkas belum diverifikasi..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const editButtons = document.querySelectorAll('.btn-edit');
@@ -353,6 +424,51 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan saat mengambil data.');
                 });
+        });
+    });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const verifikasiButtons = document.querySelectorAll('.btn-verifikasi');
+    const modalElement = document.getElementById('modalVerifikasi');
+    if (!modalElement) return;
+    const modalVerifikasi = new bootstrap.Modal(modalElement);
+    
+    const selectStatus = document.getElementById('verifikasi_status');
+    const containerKeterangan = document.getElementById('container_keterangan');
+    const textareaKeterangan = document.getElementById('verifikasi_keterangan');
+
+    // Event listener untuk memunculkan/menyembunyikan teks keterangan secara dinamis
+    selectStatus.addEventListener('change', function() {
+        if (this.value === 'Belum Verifikasi') {
+            containerKeterangan.style.display = 'block';
+            textareaKeterangan.setAttribute('required', 'required');
+        } else {
+            containerKeterangan.style.display = 'none';
+            textareaKeterangan.removeAttribute('required');
+            textareaKeterangan.value = ''; // Reset nilai jika memilih setuju
+        }
+    });
+
+    // Menangani klik pada tombol verifikasi di baris tabel
+    verifikasiButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            const status = this.getAttribute('data-status');
+            const keterangan = this.getAttribute('data-keterangan');
+
+            // Sesuaikan route URL update verifikasi di admin controller Anda
+            document.getElementById('formVerifikasi').setAttribute('action', `/admin/pensiun/${id}/verifikasi`);
+
+            // Mengisi default value modal sesuai data baris tabel
+            selectStatus.value = status === 'Belum Verifikasi' ? 'Belum Verifikasi' : 'Sudah Verifikasi';
+            textareaKeterangan.value = keterangan ?? '';
+            
+            // Trigger event change agar tampilan container keterangan sinkron saat modal terbuka
+            selectStatus.dispatchEvent(new Event('change'));
+
+            modalVerifikasi.show();
         });
     });
 });
